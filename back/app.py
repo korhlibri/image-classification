@@ -1,6 +1,6 @@
 # Back-end APIs will go here
 from flask import Flask, jsonify, request
-import random, json
+import random, json, re
 import os
 
 app = Flask(__name__)
@@ -41,6 +41,16 @@ def url_classify():
             "status": "error",
             "message": "The url was not correctly parsed."
         }), 400
+    else:
+        if data["url"][:4] != "http":
+            data["url"] = "http://" + data["url"]
+        p = re.compile(r"^http(?:s)?:\/\/[a-zA-Z0-9\.]+\..{1,3}(?=\/)")
+
+        if not p.match(data["url"]):
+            return jsonify({
+                "status": "error",
+                "message": "The url is invalid."
+            }), 400
     if "target" not in data.keys():
         return jsonify({
             "status": "error",
