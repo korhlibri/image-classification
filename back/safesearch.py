@@ -1,5 +1,6 @@
 import argparse
 from google.cloud import vision
+from google.oauth2 import service_account
 
 def detect_safe_search(uri):
     """Detects unsafe features in the file."""
@@ -14,7 +15,10 @@ def detect_safe_search(uri):
         0.95,
     )
 
-    client = vision.ImageAnnotatorClient()
+    creds = service_account.Credentials.from_service_account_file('./key.json')
+
+    client = vision.ImageAnnotatorClient(credentials=creds)
+
     image = vision.Image()
     image.source.image_uri = uri
 
