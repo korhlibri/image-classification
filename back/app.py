@@ -90,6 +90,7 @@ def url_classify():
         }), 500
     return jsonify({
         "status": "success",
+        "image_count": len(images),
         "data": {
             "adult": {
                 "percentage": total_likelihood[0],
