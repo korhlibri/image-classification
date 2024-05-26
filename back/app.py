@@ -1,6 +1,6 @@
 # Back-end APIs will go here
 from flask import Flask, jsonify, request
-import random, json, re, logging, time
+import random, json, re, time
 import os
 from flask_cors import CORS, cross_origin
 
@@ -9,8 +9,6 @@ app.secret_key = "gup4RzyNCNtgChRL"
 
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
-
-logger = logging.getLogger(__name__)
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -103,6 +101,4 @@ def page_not_found(error):
     }), 404
 
 if __name__ == "__main__":
-    logging.basicConfig(filename="myapp.log", level=logging.INFO)
-    logger.info("STARTED LOGGING AT %s", time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
     app.run(debug=True)
