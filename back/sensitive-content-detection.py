@@ -26,8 +26,6 @@ def analyze_content(images_uris):
     # Calculate the average score per type
     total_likelihood = [round((i/len(images_uris)), 2) for i in total_likelihood]
 
-    done_event.set()
-
     return total_likelihood, potential_sensitive_content
 
 def display_results(total_likelihood, potential_content):
@@ -44,25 +42,13 @@ def display_results(total_likelihood, potential_content):
     print(f"  {potential_content[2]} imágenes con posible contenido violento.")
     print("\n***************************")
 
-import sys
-import time
-
-def animate_dots():
-    sys.stdout.write('Analizando')
-    while not done_event.is_set():
-        time.sleep(.5)
-        sys.stdout.write('.')
-        sys.stdout.flush()
-
 if __name__ == "__main__":
+
     images_uris = images_from_url("https://www.female-anatomy-for-artist.com/")
 
-    done_event = threading.Event()
-    animation_thread = threading.Thread(target=animate_dots)
-    animation_thread.start()
+    if not images_uris:
+        exit()
 
     total_likelihood, potential_sensitive_content = analyze_content(images_uris)
-
-    animation_thread.join()
 
     display_results(total_likelihood, potential_sensitive_content)

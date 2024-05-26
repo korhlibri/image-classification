@@ -13,6 +13,11 @@ def images_from_url(url):
 
     p_img = re.compile(r"^.*\.(png|jpg|jpeg)$", re.IGNORECASE)
 
+    if soup.find_all("img") == 0:
+        return []
+    
+
+    # Find images specified in <img> tags
     for img in soup.find_all("img"):
         img_url = img.get("src")
         if not img_url:
@@ -21,6 +26,15 @@ def images_from_url(url):
             continue
 
         img_urls.append(urljoin(url, img_url))
+
+    # Find images specified in the style attribute of other elements
+    for element in soup.find_all():
+        style = element.get("style")
+        if style:
+            matches = re.findall(r'url\(([^)]+)\)', style)
+            for match in matches:
+                if p_img.match(match):
+                    img_urls.append(urljoin(url, match.strip('"\'')))
 
     print(f"Se encontraron {len(img_urls)} imágenes en la página web.")
 
