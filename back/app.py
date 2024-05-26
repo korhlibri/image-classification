@@ -50,18 +50,13 @@ def url_classify():
     else:
         if data["url"][:4] != "http":
             data["url"] = "http://" + data["url"]
-        p = re.compile(r"^http(?:s)?:\/\/[a-zA-Z0-9\.]+\..{1,3}(?=\/)")
+        p = re.compile(r"^http(?:s)?:\/\/[a-zA-Z0-9\.]+\..{1,3}(?=\/|)")
 
         if not p.match(data["url"]):
             return jsonify({
                 "status": "error",
                 "message": "The url is invalid."
             }), 400
-    if "target" not in data.keys():
-        return jsonify({
-            "status": "error",
-            "message": "The target was not correctly parsed."
-        }), 400
     op = random.choices([0, 1], weights=[0.2, 0.8])
     print(op)
     if op[0] == 1:
