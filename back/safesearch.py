@@ -5,13 +5,13 @@ def detect_safe_search(uri):
     """Detects unsafe features in the file."""
 
     # Names of likelihood from google.cloud.vision.enums
-    likelihood_name = (
-        "UNKNOWN",
-        "VERY_UNLIKELY",
-        "UNLIKELY",
-        "POSSIBLE",
-        "LIKELY",
-        "VERY_LIKELY",
+    likelihood = (
+        0,
+        0.05,
+        0.15,
+        0.45,
+        0.75,
+        0.95,
     )
 
     client = vision.ImageAnnotatorClient()
@@ -29,7 +29,7 @@ def detect_safe_search(uri):
         print("\n***************************************\n")
         return
 
-    if likelihood_name[safe.adult] == "UNKNOWN":
+    if likelihood[safe.adult] == "UNKNOWN":
         print("\n***************************************\n")
         print(
             f" Image with uri:\n {uri} \n could not be processed"
@@ -37,15 +37,5 @@ def detect_safe_search(uri):
         print("\n***************************************\n")
         return
     
-    print("\n***************************************\n")
-    print(f"Image from {uri}:")
-    print(f"adult: {likelihood_name[safe.adult]}")
-    print(f"medical: {likelihood_name[safe.medical]}")
-    print(f"violence: {likelihood_name[safe.violence]}")
-    print("\n***************************************\n")
+    return [likelihood[safe.adult], likelihood[safe.medical], likelihood[safe.violence]]    
 
-    if response.error.message:
-        raise Exception(
-            "{}\nFor more info on error messages, check: "
-            "https://cloud.google.com/apis/design/errors".format(response.error.message)
-        )

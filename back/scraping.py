@@ -1,9 +1,7 @@
 import requests
-import base64
 import re
 from urllib.parse import urljoin
 from bs4 import BeautifulSoup
-from safesearch import detect_safe_search
 
 def images_from_url(url):
     response = requests.get(url)
@@ -11,7 +9,7 @@ def images_from_url(url):
     html = response.text
     soup = BeautifulSoup(html, "html.parser")
 
-    detected_images = []
+    img_urls = []
 
     p_img = re.compile(r"^.*\.(png|jpg|jpeg)$", re.IGNORECASE)
 
@@ -21,13 +19,11 @@ def images_from_url(url):
             continue
         if not p_img.match(img_url):
             continue
-        img_url = urljoin(url, img_url)
-        detect_safe_search(img_url)
-        img_content = requests.get(img_url).content
-        encoded_bytes = base64.b64encode(img_content)
-        detected_images.append(encoded_bytes.decode("utf-8"))
 
-    return detected_images
+        img_urls.append(urljoin(url, img_url))
 
-if __name__ == "__main__":
-    images_from_url("https://en.wikipedia.org/wiki/Hello")
+    print(f"Se encontraron {len(img_urls)} imágenes en la página web.")
+
+    return img_urls
+
+    
