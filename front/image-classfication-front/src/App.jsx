@@ -1,22 +1,13 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import HeaderTitle from './headerComponent'
+import "./App.css";
+import HeaderNav from "./HeaderNav";
+import Formulario from "./ImageProcesser";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+export function App() {
   return (
     <>
-      <HeaderTitle/>
+      <HeaderNav/>
+      <Formulario/>
       
-      <div>
-        <form action="" method="post"></form>
-        <button></button>
-      </div>
     </>
-  )
+  );
 }
-
-export default App
