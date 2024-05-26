@@ -2,15 +2,20 @@
 from flask import Flask, jsonify, request
 import random, json, re, logging, time
 import os
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 app.secret_key = "gup4RzyNCNtgChRL"
+
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 logger = logging.getLogger(__name__)
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 @app.route('/image', methods=["POST"])
+@cross_origin()
 def image_classify():
     data = json.loads(request.data)
     if "image" not in data.keys():
@@ -36,6 +41,7 @@ def image_classify():
         }), 500
     
 @app.route('/url', methods=["POST"])
+@cross_origin()
 def url_classify():
     data = json.loads(request.data)
     if "url" not in data.keys():
@@ -89,6 +95,7 @@ def url_classify():
         }), 500
 
 @app.errorhandler(404)
+@cross_origin()
 def page_not_found(error):
     return jsonify({
         "status": "error",

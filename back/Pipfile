@@ -9,6 +9,7 @@ bs4 = "*"
 requests = "*"
 google-auth = "*"
 google-cloud-vision = "*"
+flask-cors = "*"
 
 [dev-packages]
 
