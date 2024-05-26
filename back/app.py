@@ -1,7 +1,7 @@
 # Back-end APIs will go here
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
-import random, json, re, time
+import random, json, re, datetime
 import os
 from threading import Lock
 
@@ -21,7 +21,7 @@ log_mutex = Lock()
 def log_event(type, message):
     with log_mutex:
         with open("./events.log", "a") as f:
-            f.write("[{}] {}: {}\n".format(time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()), type, message))
+            f.write("[{}] {}: {}\n".format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"), type, message))
 
 @app.route('/image', methods=["POST"])
 @cross_origin()
