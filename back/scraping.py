@@ -12,11 +12,7 @@ def images_from_url(url):
     img_urls = []
 
     p_img = re.compile(r"^.*\.(png|jpg|jpeg)$", re.IGNORECASE)
-
-    if soup.find_all("img") == 0:
-        return []
     
-
     # Find images specified in <img> tags
     for img in soup.find_all("img"):
         img_url = img.get("src")
