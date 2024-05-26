@@ -4,6 +4,9 @@ import random, json, re, time
 import os
 from flask_cors import CORS, cross_origin
 
+from scraping import images_from_url
+from sensitive_content_detection import analyze_content
+
 app = Flask(__name__)
 app.secret_key = "gup4RzyNCNtgChRL"
 
@@ -57,35 +60,52 @@ def url_classify():
                 "status": "error",
                 "message": "The url is invalid."
             }), 400
-    op = random.choices([0, 1], weights=[0.2, 0.8])
-    print(op)
-    if op[0] == 1:
-        return jsonify({
-            "status": "success",
-            "data": {
-                "gore": {
-                    "percentage": 0.06,
-                    "amount": 1,
-                },
-                "violent": {
-                    "percentage": 0,
-                    "amount": 0,
-                },
-                "medical": {
-                    "percentage": 0.26,
-                    "amount": 16,
-                },
-                "adult": {
-                    "percentage": 0.2,
-                    "amount": 12,
-                },
-            },
-        }), 200
-    else:
+    images = []
+    try:
+        images = images_from_url(data["url"])
+    except Exception as e:
+        print(e)
         return jsonify({
             "status": "error",
             "message": "There was a server error."
         }), 500
+    if images == []:
+        return jsonify({
+            "status": "error",
+            "message": "No images were detected in the provided URL."
+        }), 400
+    total_likelihood, potential_sensitive_content = [], []
+    try:
+        total_likelihood, potential_sensitive_content = analyze_content(images)
+    except Exception as e:
+        print(e)
+        return jsonify({
+            "status": "error",
+            "message": "There was a server error."
+        }), 500
+    if len(total_likelihood) != 3 and len(potential_sensitive_content) != 3:
+        return jsonify({
+            "status": "error",
+            "message": "There was a server error."
+        }), 500
+    return jsonify({
+        "status": "success",
+        "data": {
+            "adult": {
+                "percentage": total_likelihood[0],
+                "amount": potential_sensitive_content[0]
+            },
+            "medical": {
+                "percentage": total_likelihood[1],
+                "amount": potential_sensitive_content[1]
+            },
+            "violent": {
+                "percentage": total_likelihood[2],
+                "amount": potential_sensitive_content[2]
+            },
+        }
+    }), 200
+    
 
 @app.errorhandler(404)
 @cross_origin()
