@@ -32,7 +32,7 @@ def images_from_url(url):
                 if p_img.match(match):
                     img_urls.append(urljoin(url, match.strip('"\'')))
 
-    print(f"Se encontraron {len(img_urls)} imágenes en la página web.")
+    # print(f"Se encontraron {len(img_urls)} imágenes en la página web.")
 
     return img_urls
 
