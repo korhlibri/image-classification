@@ -5,6 +5,7 @@ from google.cloud import vision
 from google.oauth2 import service_account
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+os.chdir(dir_path)
 
 creds = service_account.Credentials.from_service_account_file('../key.json')
 
@@ -101,4 +102,3 @@ def detect_safe_search_url(uri):
         return
     
     return [likelihood[safe.adult], likelihood[safe.medical], likelihood[safe.violence]]    
-
