@@ -4,6 +4,9 @@ import os
 from google.cloud import vision
 from google.oauth2 import service_account
 
+dir_path = os.path.dirname(os.path.realpath(__file__))
+
+creds = service_account.Credentials.from_service_account_file('../key.json')
 
 def detect_safe_search_base64(base64_string):
     """Detects unsafe features in the file."""
@@ -18,7 +21,7 @@ def detect_safe_search_base64(base64_string):
         0.95,
     )
 
-    client = vision.ImageAnnotatorClient()
+    client = vision.ImageAnnotatorClient(credentials=creds)
 
      # Decode base64 string to bytes
     image_data = base64.b64decode(base64_string, validate=True)
@@ -73,7 +76,7 @@ def detect_safe_search_url(uri):
         0.95,
     )
 
-    client = vision.ImageAnnotatorClient()
+    client = vision.ImageAnnotatorClient(credentials=creds)
 
     image = vision.Image()
     image.source.image_uri = uri
