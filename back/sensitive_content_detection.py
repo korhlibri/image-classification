@@ -1,10 +1,23 @@
 import sys
 import time
 import threading
-from safesearch import detect_safe_search
+from safesearch import detect_safe_search_url, detect_safe_search_base64
 from scraping import images_from_url
 
-sys.stdout.reconfigure(encoding='utf-8')
+sys.stdout.reconfigure(encoding='utf-8')   
+
+def analyze_image(img):
+
+    potential_sensitive_content = [0, 0, 0]
+
+    # Call SafeSearch API to detect type of content
+    total_likelihood = detect_safe_search_base64(img)
+
+    for i in range(len(total_likelihood)):
+        if total_likelihood[i] > .70:
+            potential_sensitive_content[i] = 1
+
+    return total_likelihood, potential_sensitive_content
 
 def analyze_content(images_uris):
 
@@ -14,7 +27,7 @@ def analyze_content(images_uris):
     for uri in images_uris:
 
         # Call SafeSearch API to detect type of content
-        likelihood = detect_safe_search(uri)
+        likelihood = detect_safe_search_url(uri)
 
         for i in range(len(likelihood)):
             if likelihood[i] > .70:

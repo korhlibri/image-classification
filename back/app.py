@@ -6,7 +6,7 @@ import os
 from threading import Lock
 
 from scraping import images_from_url
-from sensitive_content_detection import analyze_content
+from sensitive_content_detection import analyze_content, analyze_image
 
 app = Flask(__name__)
 app.secret_key = "gup4RzyNCNtgChRL"
@@ -33,22 +33,40 @@ def image_classify():
             "status": "error",
             "message": "The image was not correctly parsed."
         }), 400
-    op = random.choices([0, 1], weights=[0.2, 0.8])
-    if op[0] == 1:
-        return jsonify({
-            "status": "success",
-            "data": {
-                "gore": 0.1,
-                "violent": 0.25,
-                "medical": 0.75,
-                "adult": 0.2
-            },
-        }), 200
-    else:
+    total_likelihood, potential_sensitive_content = [], []
+    try:
+        total_likelihood, potential_sensitive_content = analyze_image(data['image'][23:])
+    except Exception as e:
+        log_event("ERROR", str(e))
         return jsonify({
             "status": "error",
             "message": "There was a server error."
         }), 500
+    if len(total_likelihood) != 3 and len(potential_sensitive_content) != 3:
+        log_event("ERROR", "invalid length from google api")
+        return jsonify({
+            "status": "error",
+            "message": "There was a server error."
+        }), 500
+    log_event("SUCCESS", "the url analysis succeeded")
+    return jsonify({
+        "status": "success",
+        "data": {
+            "adult": {
+                "percentage": total_likelihood[0] * 100,
+                "amount": potential_sensitive_content[0]
+            },
+            "medical": {
+                "percentage": total_likelihood[1] * 100,
+                "amount": potential_sensitive_content[1]
+            },
+            "violent": {
+                "percentage": total_likelihood[2] * 100,
+                "amount": potential_sensitive_content[2]
+            },
+        }
+    }), 200
+
     
 @app.route('/url', methods=["POST"])
 @cross_origin()
@@ -59,7 +77,7 @@ def url_classify():
         log_event("ERROR", "url not in request.data")
         return jsonify({
             "status": "error",
-            "message": "The url was not correctly parsed."
+            "message": "The url was not correctly parsed." 
         }), 400
     else:
         if data["url"][:4] != "http":
@@ -108,15 +126,15 @@ def url_classify():
         "image_count": len(images),
         "data": {
             "adult": {
-                "percentage": total_likelihood[0],
+                "percentage": total_likelihood[0] * 100,
                 "amount": potential_sensitive_content[0]
             },
             "medical": {
-                "percentage": total_likelihood[1],
+                "percentage": total_likelihood[1] * 100,
                 "amount": potential_sensitive_content[1]
             },
             "violent": {
-                "percentage": total_likelihood[2],
+                "percentage": total_likelihood[2] * 100,
                 "amount": potential_sensitive_content[2]
             },
         }
