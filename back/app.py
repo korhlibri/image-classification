@@ -150,5 +150,13 @@ def page_not_found(error):
         "message": "The specified route does not exist."
     }), 404
 
+@app.errorhandler(405)
+@cross_origin()
+def method_not_allowed(error):
+    return jsonify({
+        "status": "error",
+        "message": "This method is not allowed for the requested API endpoint."
+    }), 405
+
 if __name__ == "__main__":
     app.run(debug=True, threaded=True)
