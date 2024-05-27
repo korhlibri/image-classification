@@ -29,6 +29,7 @@ def image_classify():
     log_event("INFO", "request image analysis")
     data = json.loads(request.data)
     if "image" not in data.keys():
+        log_event("ERROR", "image not in request.data")
         return jsonify({
             "status": "error",
             "message": "The image was not correctly parsed."
@@ -48,7 +49,7 @@ def image_classify():
             "status": "error",
             "message": "There was a server error."
         }), 500
-    log_event("SUCCESS", "the url analysis succeeded")
+    log_event("SUCCESS", "the image analysis succeeded")
     return jsonify({
         "status": "success",
         "data": {
