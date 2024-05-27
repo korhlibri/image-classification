@@ -4,7 +4,8 @@ import { userState } from 'react';
 export default function Formulario () {
     const [selectedFile, setSelectedFile] = useState(null);
     const [base64Image, setBase64Image] = useState('');
-    const [urlImage, setUrlImage] = useState('')
+    const [urlImage, setUrlImage] = useState('');
+    const [responseData, setResponseData] = useState(null);
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -41,6 +42,7 @@ export default function Formulario () {
         .then(response => response.json())
         .then(data => {
             console.log('Success', data);
+            setResponseData(data); // Actualizar el estado con los datos recibidos
         })
         .catch((error) =>{
             console.error('Error:', error);
@@ -71,6 +73,7 @@ export default function Formulario () {
             .then(response => response.json())
             .then(data => {
                 console.log('Success', data);
+                setResponseData(data);
             })
             .catch((error) =>{
                 console.error('Error:', error);
@@ -78,25 +81,40 @@ export default function Formulario () {
     }
 
     return(
+    <div>
         <div>
-        <h1>FILE</h1>
-        <form onSubmit={handleSubmitFile}>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-          />
-          <button type="submit">Enviar</button>
-        </form>
-        <h1>URL</h1>
-        <form onSubmit={handleSubmitUrl}>
-          <input
-            type="url"
-            value={urlImage}
-            onChange={(e) => setUrlImage(e.target.value)}
-          />
-          <button type="submit">Enviar</button>
-        </form>
-      </div>
+            <h1>FILE</h1>
+            <form onSubmit={handleSubmitFile}>
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                />
+                <button type="submit">Enviar</button>
+                </form>
+                <h1>URL</h1>
+                <form onSubmit={handleSubmitUrl}>
+                <input
+                    type="url"
+                    value={urlImage}
+                    onChange={(e) => setUrlImage(e.target.value)}
+                />
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
+        <div>
+            <h1>IMAGE CLASSIFICATION</h1>
+            {responseData && (
+                    <div>
+                        <p>PERCENTAGE</p>
+                        <div>
+                            <p>Adult: {responseData.data.adult.percentage}%</p>
+                            <p>Medical: {responseData.data.medical.percentage}%</p>
+                            <p>Violent: {responseData.data.violent.percentage}%</p>
+                        </div>
+                    </div>
+                )}
+        </div>
+    </div>
     )
 }
