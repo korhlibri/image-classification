@@ -36,7 +36,7 @@ def image_classify():
         }), 400
     total_likelihood, potential_sensitive_content = [], []
     try:
-        total_likelihood, potential_sensitive_content = analyze_image(data['image'][23:])
+        total_likelihood, potential_sensitive_content = analyze_image(data["image"])
     except Exception as e:
         log_event("ERROR", str(e))
         return jsonify({
