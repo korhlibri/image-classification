@@ -82,24 +82,26 @@ export default function Formulario () {
 
     return(
     <div>
-        <div>
+        <div class="">
             <h1>FILE</h1>
-            <form onSubmit={handleSubmitFile}>
+            <form onSubmit={handleSubmitFile} class="">
                 <input
                     type="file"
                     accept="image/*"
                     onChange={handleFileChange}
                 />
-                <button type="submit">Enviar</button>
-                </form>
-                <h1>URL</h1>
-                <form onSubmit={handleSubmitUrl}>
+                <button type="submit" class="btn btn-primary">Send</button>
+            </form>
+            
+            
+            <h1>URL</h1>
+            <form onSubmit={handleSubmitUrl} class="">
                 <input
                     type="url"
                     value={urlImage}
                     onChange={(e) => setUrlImage(e.target.value)}
                 />
-                <button type="submit">Enviar</button>
+                <button type="submit" class="btn btn-primary">Send</button>
             </form>
         </div>
         <div>
