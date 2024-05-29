@@ -12,7 +12,9 @@ export default function Formulario () {
         if (file) { 
         const reader = new FileReader();
         reader.onloadend = () => {
-            setBase64Image(reader.result);
+            
+            var base64result = reader.result.split(',')[1];
+            setBase64Image(base64result);
         };
         reader.readAsDataURL(file);
         setSelectedFile(file)
@@ -82,26 +84,26 @@ export default function Formulario () {
 
     return(
     <div>
-        <div class="">
+        <div>
             <h1>FILE</h1>
-            <form onSubmit={handleSubmitFile} class="">
+            <form onSubmit={handleSubmitFile}>
                 <input
                     type="file"
                     accept="image/*"
                     onChange={handleFileChange}
                 />
-                <button type="submit" class="btn btn-primary">Send</button>
+                <button type="submit">Send</button>
             </form>
             
             
             <h1>URL</h1>
-            <form onSubmit={handleSubmitUrl} class="">
+            <form onSubmit={handleSubmitUrl} >
                 <input
                     type="url"
                     value={urlImage}
                     onChange={(e) => setUrlImage(e.target.value)}
                 />
-                <button type="submit" class="btn btn-primary">Send</button>
+                <button type="submit">Send</button>
             </form>
         </div>
         <div>
