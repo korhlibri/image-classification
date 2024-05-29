@@ -1,5 +1,5 @@
 export default function HeaderNav() {
     return(
-        <h1>IMAGE CLASSIFICATOR</h1>
+        <h1>Image Classificator</h1>
     )
 }
