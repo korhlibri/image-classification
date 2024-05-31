@@ -144,20 +144,20 @@ export default function Formulario () {
         </Tabs>
         <hr />
         <div className="imPr-results">
-            <h1>Image Classification Percentage</h1>
+            <h1>Content Results</h1>
             {responseData && (
                     <div>
                         <div>
                             <Row>
-                                <Col><p>Adult: {responseData.data.adult.percentage.toFixed(2)}% </p></Col>
+                                <Col><p>Adult : {responseData.data.adult.percentage.toFixed(2)}% </p></Col>
                                 <Col><p>Total amount of images: {responseData.data.adult.amount}</p></Col>
                             </Row>
                             <Row>
-                                <Col><p>Adult: {responseData.data.medical.percentage.toFixed(2)}% </p></Col>
+                                <Col><p>Medical : {responseData.data.medical.percentage.toFixed(2)}% </p></Col>
                                 <Col><p>Total amount of images: {responseData.data.medical.amount}</p></Col>
                             </Row>
                             <Row>
-                                <Col><p>Adult: {responseData.data.violent.percentage.toFixed(2)}% </p></Col>
+                                <Col><p>Violent : {responseData.data.violent.percentage.toFixed(2)}% </p></Col>
                                 <Col><p>Total amount of images: {responseData.data.violent.amount}</p></Col>
                             </Row>
                         </div>
