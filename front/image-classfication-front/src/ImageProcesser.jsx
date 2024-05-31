@@ -77,6 +77,7 @@ export default function Formulario () {
             return;
         }
 
+
         const apiUrl = 'http://127.0.0.1:5000/url'
 
         fetch(apiUrl, {
@@ -92,12 +93,14 @@ export default function Formulario () {
             .then(data => {
                 console.log('Success', data);
                 setResponseData(data);
+                setIsLoading(false);
             })
             .catch((error) =>{
                 console.error('Error:', error);
             });
-    }
-
+            
+        }
+        
     return(
     <div>
         <Tabs
@@ -146,15 +149,15 @@ export default function Formulario () {
                     <div>
                         <div>
                             <Row>
-                                <Col><p>Adult: {responseData.data.adult.percentage}% </p></Col>
+                                <Col><p>Adult: {responseData.data.adult.percentage.toFixed(2)}% </p></Col>
                                 <Col><p>Total amount of images: {responseData.data.adult.amount}</p></Col>
                             </Row>
                             <Row>
-                                <Col><p>Adult: {responseData.data.medical.percentage}% </p></Col>
+                                <Col><p>Adult: {responseData.data.medical.percentage.toFixed(2)}% </p></Col>
                                 <Col><p>Total amount of images: {responseData.data.medical.amount}</p></Col>
                             </Row>
                             <Row>
-                                <Col><p>Adult: {responseData.data.violent.percentage}% </p></Col>
+                                <Col><p>Adult: {responseData.data.violent.percentage.toFixed(2)}% </p></Col>
                                 <Col><p>Total amount of images: {responseData.data.violent.amount}</p></Col>
                             </Row>
                         </div>
