@@ -1,6 +1,9 @@
 # Logging files
 *.log
 
+# Google Cloud keys
+key.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
