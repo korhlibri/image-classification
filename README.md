@@ -10,3 +10,5 @@ cd front
 npm run dev
 ```
 React front-end uses Vite for startup. In order to start a production ready build, modifications have to be made for both Flask and React.
+
+Before running, make sure to export the Google Cloud Vision key into a `key.json` file in the top-level directory.
